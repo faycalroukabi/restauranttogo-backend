@@ -2,11 +2,12 @@ package com.restauranttogo.menuservice.presentation;
 
 import java.util.List;
 
+import com.restauranttogo.menuservice.dtos.DrinkDto;
+import com.restauranttogo.menuservice.dtos.FoodDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 
 import com.restauranttogo.menuservice.dtos.ServingDto;
@@ -17,11 +18,38 @@ import com.restauranttogo.menuservice.services.ServingService;
 public class ServingController {
 	@Autowired
 	private ServingService servingService;
-	
+
 	@GetMapping("/listservings")
 	public <T extends ServingDto> List<T> getAll(){
-		List<T> servings = servingService.mapAllDto();
-		return servings;
+		return servingService.mapAllDto();
 	}
 
-}
+
+	@PostMapping("/addFood")
+	public  ResponseEntity<ServingDto> addFood(@RequestBody FoodDto foodDto){
+		ServingDto result= servingService.mapFood(foodDto);
+        return new ResponseEntity(result, HttpStatus.OK);
+	}
+
+	@PostMapping("/addserving")
+	public <T extends ServingDto> ResponseEntity<T> addDrink(@RequestBody T servingDto){
+        ServingDto result=servingService.mapDrink(servingDto);
+		return new ResponseEntity(result,HttpStatus.OK);
+
+	}
+
+	@GetMapping("/searchServings")
+	public  ResponseEntity <FoodDto> searchFood(@PathVariable Long identifier){
+		FoodDto result= (FoodDto) servingService.getServingById(identifier);
+		return new ResponseEntity(result,HttpStatus.OK);
+	}
+
+
+
+
+
+
+
+
+
+	}

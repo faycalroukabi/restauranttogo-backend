@@ -15,6 +15,8 @@ import lombok.Setter;
 public class DrinkDto extends ServingDto{
 	private Double volume;
 	private Boolean alcoholic;
+
+
 	public DrinkDto(String name, Double calories, String countryOfOrigin, List<IngredientDto> ingredients,
 			Double volume, Boolean alcoholic) {
 		super(name, calories, countryOfOrigin, ingredients);
