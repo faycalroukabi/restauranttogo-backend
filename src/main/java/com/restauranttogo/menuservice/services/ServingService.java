@@ -55,7 +55,6 @@ public class ServingService {
         }
     }
 
-//type
     public ServingDto mapFood(ServingDto servingDto) {
         FoodPo foodPo = new FoodPo();
         foodPo.setAverageWeight(((FoodDto) servingDto).getAverageWeight());
@@ -64,7 +63,7 @@ public class ServingService {
         foodPo = foodRepository.save(foodPo);
         return  servingMapper.convertToDto(foodPo);
     }
-    //type
+    
     public ServingDto mapDrink(ServingDto servingDto) {
         DrinkPo drinkPo = new DrinkPo();
         drinkPo.setAlcoholic(((DrinkDto) servingDto).getAlcoholic());
@@ -73,7 +72,6 @@ public class ServingService {
         drinkPo = drinkRepository.save(drinkPo);
         return servingMapper.convertToDto(drinkPo);
     }
-
 
     public void mapIngredients(List<IngredientPo> ingredients) {
         ingredientRepository.saveAll(ingredients);
@@ -115,33 +113,32 @@ public class ServingService {
 
         return (T) servingDto;
     }
-    public <T extends ServingDto, S extends ServingPo> S mapOneServingBo(T servingDto) {
+    public <T extends ServingDto, S extends ServingPo> T mapOneServingPo(T servingDto) {
         ServingPo servingPo = new ServingPo();
-        if (servingPo instanceof FoodPo) {
+        if (servingDto instanceof FoodDto) {
             servingPo = new FoodPo();
             ((FoodPo) servingPo).setAverageWeight(((FoodDto) servingDto).getAverageWeight());
             ((FoodPo) servingPo).setSufficiency(((FoodDto) servingDto).getSufficiency());
         }
-        if (servingPo instanceof DrinkPo) {
-            servingDto = new DrinkDto();
-            ((DrinkDto) servingDto).setAlcoholic(((DrinkPo) servingPo).getAlcoholic());
-            ((DrinkDto) servingDto).setVolume(((DrinkPo) servingPo).getVolume());
+        if (servingDto instanceof DrinkDto) {
+            servingPo = new DrinkPo();
+            ((DrinkPo) servingPo).setAlcoholic(((DrinkDto) servingDto).getAlcoholic());
+            ((DrinkPo) servingPo).setVolume(((DrinkDto) servingDto).getVolume());
         }
-        servingDto.setCountryOfOrigin(servingPo.getCountryOfOrigin());
-        servingDto.setName(servingPo.getName());
-        servingDto.setCalories(servingPo.getCalories());
-        List<IngredientDto> ingredientDtos = new ArrayList<>();
-        servingPo.getIngredients().stream().forEach(ingredientPo -> {
-            IngredientDto ingredientDto = new IngredientDto();
-            ingredientDto.setName(ingredientPo.getName());
-            ingredientDto.setType(ingredientPo.getType());
-            ingredientDtos.add(ingredientDto);
+        servingPo.setCountryOfOrigin(servingDto.getCountryOfOrigin());
+        servingPo.setName(servingDto.getName());
+        servingPo.setCalories(servingDto.getCalories());
+        List<IngredientPo> ingredientPos = new ArrayList<>();
+        servingPo.getIngredients().stream().forEach(ingredientDto -> {
+            IngredientPo ingredientPo = new IngredientPo();
+            ingredientPo.setName(ingredientDto.getName());
+            ingredientPo.setType(ingredientDto.getType());
+            ingredientPos.add(ingredientPo);
         });
-        servingDto.setIngredients(ingredientDtos);
-
-        return (T) servingDto;
+        servingPo.setIngredients(ingredientPos);
+        servingRepository.save(servingPo);
+        return (T) mapOneServingDto(servingPo);
     }
-//servings
     public ServingDto getServingById(Long identifier) {
         ServingPo servingPo = servingRepository.getOne(identifier);
         return servingMapper.convertToDto(servingPo);

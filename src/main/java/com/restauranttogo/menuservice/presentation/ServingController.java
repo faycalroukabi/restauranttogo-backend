@@ -25,15 +25,9 @@ public class ServingController {
 	}
 
 
-	@PostMapping("/addFood")
-	public  ResponseEntity<ServingDto> addFood(@RequestBody FoodDto foodDto){
-		ServingDto result= servingService.mapFood(foodDto);
-        return new ResponseEntity(result, HttpStatus.OK);
-	}
-
 	@PostMapping("/addserving")
 	public <T extends ServingDto> ResponseEntity<T> addDrink(@RequestBody T servingDto){
-        ServingDto result=servingService.mapDrink(servingDto);
+        ServingDto result=servingService.mapOneServingPo(servingDto);
 		return new ResponseEntity(result,HttpStatus.OK);
 
 	}

@@ -26,15 +26,7 @@ public class ServingMapper {
         servingDto.setCalories(servingPo.getCalories());
         servingDto.setName(servingPo.getName());
         servingDto.setCountryOfOrigin(servingPo.getCountryOfOrigin());
-        if(servingPo instanceof FoodPo){
-            servingDto.setAverageWeight(((FoodPo) servingPo).getAverageWeight());
-            servingDto.setSufficiency(((FoodPo) servingPo).getSufficiency());
-        }
-        if(servingPo instanceof DrinkPo){
-            servingDto.setVolume(((DrinkPo) servingPo).getVolume());
-            servingDto.setAlcoholic(((DrinkPo) servingPo).getAlcoholic());
-        }
-
+        
         return servingDto;
     }
 }
