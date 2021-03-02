@@ -1,5 +1,6 @@
 package com.restauranttogo.menuservice.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -39,11 +40,11 @@ public class MenuPo {
 	@JoinTable(name = "COURSES_PER_MENU", 
 			joinColumns = @JoinColumn(name="MENU_ID"), 
 			inverseJoinColumns = @JoinColumn(name="COURSE_ID"))
-	private List<CoursePo> courses;
+	private List<CoursePo> courses = new ArrayList<>();
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "SERVINGS_PER_MENU", 
 			joinColumns = @JoinColumn(name="MENU_ID"), 
 			inverseJoinColumns = @JoinColumn(name="SERVING_ID"))
-	private List<ServingPo> servings;
+	private List<ServingPo> servings = new ArrayList<>();
 
 }

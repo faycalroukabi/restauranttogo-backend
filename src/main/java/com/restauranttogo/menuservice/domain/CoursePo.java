@@ -1,5 +1,6 @@
 package com.restauranttogo.menuservice.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
@@ -31,8 +32,8 @@ public class CoursePo {
 	@JoinTable(name = "SERVINGS_PER_COURSE", 
 		joinColumns = @JoinColumn(name="SERVING_ID"), 
 		inverseJoinColumns = @JoinColumn(name="COURSE_ID"))
-	private List<ServingPo> servings;
+	private List<ServingPo> servings = new ArrayList<>();
 	@ManyToMany(mappedBy = "courses")
-	private List<MenuPo> menus;
+	private List<MenuPo> menus = new ArrayList<>();
 	
 }

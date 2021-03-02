@@ -8,6 +8,9 @@ import com.restauranttogo.menuservice.domain.ServingPo;
 
 @Transactional
 @Repository
-public interface ServingRepository extends ServingBaseRepository<ServingPo>, JpaRepository<ServingPo,Long>{
-	public <T extends ServingPo> T findFirstByName(String name);
+public interface ServingRepository extends ServingBaseRepository<ServingPo>, JpaRepository<ServingPo, Long> {
+    public <T extends ServingPo> T findFirstByName(String name);
+
+    public <T extends ServingPo> T findByIdentifier(Long identifier);
+
 }

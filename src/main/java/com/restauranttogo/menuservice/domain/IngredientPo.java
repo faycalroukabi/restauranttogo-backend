@@ -1,14 +1,9 @@
 package com.restauranttogo.menuservice.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -29,12 +24,12 @@ public class IngredientPo {
 	@JsonIgnore
 	@Column(name = "INGREDIENT_ID")
 	private Long identifier;
-	@Column(name = "INGREDIENT_NAME")
+	@Column(name = "INGREDIENT_NAME" , unique = true)
 	private String name;
 	@Column(name = "INGREDIENT_TYPE")
 	private String type;
-	@ManyToMany(mappedBy="ingredients")
-	private List<ServingPo> servings;
+	@ManyToMany(mappedBy="ingredients", fetch = FetchType.EAGER)
+	private List<ServingPo> servings = new ArrayList<>();
 	public IngredientPo(String name, String type) {
 		super();
 		this.name = name;

@@ -1,5 +1,6 @@
 package com.restauranttogo.menuservice.dtos;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Data;
@@ -8,5 +9,5 @@ import lombok.Data;
 public class CourseDto {
 	private String title;
 	private Integer courses;
-	private List<ServingDto> servings;
+	private List<ServingDto> servings = new ArrayList<>();
 }

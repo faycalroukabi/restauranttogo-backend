@@ -3,7 +3,10 @@ package com.restauranttogo.menuservice.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.restauranttogo.menuservice.domain.*;
+import com.restauranttogo.menuservice.exception.ObjectNotFoundException;
 import com.restauranttogo.menuservice.mapper.ServingMapper;
+import com.restauranttogo.menuservice.tool.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,14 +14,11 @@ import com.restauranttogo.menuservice.data.DrinkRepository;
 import com.restauranttogo.menuservice.data.FoodRepository;
 import com.restauranttogo.menuservice.data.IngredientRepository;
 import com.restauranttogo.menuservice.data.ServingRepository;
-import com.restauranttogo.menuservice.domain.DrinkPo;
-import com.restauranttogo.menuservice.domain.FoodPo;
-import com.restauranttogo.menuservice.domain.IngredientPo;
-import com.restauranttogo.menuservice.domain.ServingPo;
 import com.restauranttogo.menuservice.dtos.DrinkDto;
 import com.restauranttogo.menuservice.dtos.FoodDto;
 import com.restauranttogo.menuservice.dtos.IngredientDto;
 import com.restauranttogo.menuservice.dtos.ServingDto;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ServingService {
@@ -61,9 +61,9 @@ public class ServingService {
         foodPo.setSufficiency(((FoodDto) servingDto).getSufficiency());
         mapCommunServing(servingDto, foodPo);
         foodPo = foodRepository.save(foodPo);
-        return  servingMapper.convertToDto(foodPo);
+        return servingMapper.convertToDto(foodPo);
     }
-    
+
     public ServingDto mapDrink(ServingDto servingDto) {
         DrinkPo drinkPo = new DrinkPo();
         drinkPo.setAlcoholic(((DrinkDto) servingDto).getAlcoholic());
@@ -87,6 +87,7 @@ public class ServingService {
         return (List<T>) servingDtos;
     }
 
+
     public <T extends ServingDto, S extends ServingPo> T mapOneServingDto(S servingPo) {
         ServingDto servingDto = new ServingDto();
         if (servingPo instanceof FoodPo) {
@@ -100,19 +101,21 @@ public class ServingService {
             ((DrinkDto) servingDto).setVolume(((DrinkPo) servingPo).getVolume());
         }
         servingDto.setCountryOfOrigin(servingPo.getCountryOfOrigin());
+        servingDto.setIdentifier(servingPo.getIdentifier());
         servingDto.setName(servingPo.getName());
         servingDto.setCalories(servingPo.getCalories());
         List<IngredientDto> ingredientDtos = new ArrayList<>();
-        servingPo.getIngredients().stream().forEach(ingredientPo -> {
+        /*servingPo.getIngredients().stream().forEach(ingredientPo -> {
             IngredientDto ingredientDto = new IngredientDto();
             ingredientDto.setName(ingredientPo.getName());
             ingredientDto.setType(ingredientPo.getType());
             ingredientDtos.add(ingredientDto);
-        });
+        });*/
         servingDto.setIngredients(ingredientDtos);
 
         return (T) servingDto;
     }
+
     public <T extends ServingDto, S extends ServingPo> T mapOneServingPo(T servingDto) {
         ServingPo servingPo = new ServingPo();
         if (servingDto instanceof FoodDto) {
@@ -136,11 +139,30 @@ public class ServingService {
             ingredientPos.add(ingredientPo);
         });
         servingPo.setIngredients(ingredientPos);
-        servingRepository.save(servingPo);
-        return (T) mapOneServingDto(servingPo);
+
+        return (T) mapOneServingDto(servingRepository.save(servingPo));
     }
-    public ServingDto getServingById(Long identifier) {
+
+
+  /*  public ServingDto getServingById(Long identifier) {
         ServingPo servingPo = servingRepository.getOne(identifier);
         return servingMapper.convertToDto(servingPo);
+    }*/
+
+    public <T extends ServingDto> T getServingByName(String name) {
+        ServingPo servingPo = servingRepository.findFirstByName(name);
+        if (servingPo != null)
+            return mapOneServingDto(servingPo);
+
+        return null;
+    }
+
+    public <T extends ServingDto> T getServingById(Long id) {
+        Validate.notNull(id, "id must be not null");
+        ServingPo servingPo = servingRepository.findByIdentifier(id);
+        if (servingPo == null)
+            throw new ObjectNotFoundException("Serving not found with id: " + id);
+
+        return mapOneServingDto(servingPo);
     }
 }
