@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.restauranttogo.menuservice.data.DrinkRepository;
 import com.restauranttogo.menuservice.data.FoodRepository;
@@ -94,6 +95,7 @@ public class ServingService {
 			((DrinkDto) servingDto).setAlcoholic(((DrinkPo) servingPo).getAlcoholic());
 			((DrinkDto) servingDto).setVolume(((DrinkPo) servingPo).getVolume());
 		}
+		servingDto.setIdentifier(servingPo.getIdentifier());
 		servingDto.setCountryOfOrigin(servingPo.getCountryOfOrigin());
 		servingDto.setName(servingPo.getName());
 		servingDto.setCalories(servingPo.getCalories());
@@ -107,5 +109,20 @@ public class ServingService {
 		servingDto.setIngredients(ingredientDtos);
 		
 		return (T) servingDto;
+	}
+
+	public <T extends ServingDto> List<T> searchServings(String searchQuery) {
+		List<ServingPo> foundServings = servingRepository.findByQuery(searchQuery);
+		List<ServingDto> servingDtos = new ArrayList<>();
+		if(CollectionUtils.isEmpty(foundServings)) {
+			return null;
+		}
+		else {
+			foundServings.stream().forEach(servingPo -> {
+				ServingDto servingDto = mapOneServingDto(servingPo);
+				servingDtos.add(servingDto);
+			});
+			return (List<T>) servingDtos;
+		}
 	}
 }
