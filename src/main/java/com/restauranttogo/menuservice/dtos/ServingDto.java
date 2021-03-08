@@ -22,6 +22,5 @@ public class ServingDto {
 		this.countryOfOrigin = countryOfOrigin;
 		this.ingredients = ingredients;
 	}
-	
-	
+
 }
