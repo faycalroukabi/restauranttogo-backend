@@ -5,6 +5,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import com.restauranttogo.menuservice.domain.IngredientPo;
@@ -15,6 +18,7 @@ import com.restauranttogo.menuservice.dtos.MenuDto;
 import com.restauranttogo.menuservice.dtos.ServingDto;
 import com.restauranttogo.menuservice.services.MenuService;
 import com.restauranttogo.menuservice.services.ServingService;
+import org.springframework.web.bind.annotation.*;
 
 @Component
 public class MenuController implements CommandLineRunner{
@@ -54,7 +58,6 @@ public class MenuController implements CommandLineRunner{
 		menuDto1.setServings(Arrays.asList(foodDto, foodDto2, foodDto3, drinkDto));
 		menuDto1.setTitle("Main menu 2");
 		menuService.mapMenu(menuDto1);
-		
-		
-	}
+}
+
 }
