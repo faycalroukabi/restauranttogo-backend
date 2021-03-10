@@ -2,6 +2,8 @@ package com.restauranttogo.menuservice.presentation;
 
 import java.util.List;
 
+import com.restauranttogo.menuservice.dtos.DrinkDto;
+import com.restauranttogo.menuservice.dtos.FoodDto;
 import com.restauranttogo.menuservice.dtos.MenuDto;
 import com.restauranttogo.menuservice.services.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,10 +41,23 @@ public class ServingController {
 		return servings;
 	}
 
-
 	@CrossOrigin(origins = "http://localhost:3000")
-	@PostMapping(path="/addMenu",consumes= MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(path="/addmenu",consumes= MediaType.APPLICATION_JSON_VALUE)
 	public void addMenu(@RequestBody MenuDto menuDto) {
 		menuService.mapMenu(menuDto);
 	}
+	
+	@CrossOrigin(origins = "http://localhost:3000")
+	@PostMapping(path="/addfood",consumes= MediaType.APPLICATION_JSON_VALUE)
+	public void addFood(@RequestBody FoodDto servingDto) {
+		servingService.mapServing(servingDto);;
+	}
+	
+	@CrossOrigin(origins = "http://localhost:3000")
+	@PostMapping(path="/adddrink",consumes= MediaType.APPLICATION_JSON_VALUE)
+	public void addDrink(@RequestBody DrinkDto servingDto) {
+		servingService.mapServing(servingDto);;
+	}
+	
+	
 }

@@ -2,6 +2,7 @@ package com.restauranttogo.menuservice.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,10 +36,12 @@ public class ServingService {
 	public <T extends ServingPo> void mapCommunServing(ServingDto servingDto, T servingAbs) {
 		ServingPo servingPo = servingAbs;
 		servingPo.setIngredients(new ArrayList<>());
-		servingDto.getIngredients().stream().forEach(ingredient -> {
-			IngredientPo ingredientPo = ingredientRepository.findByName(ingredient.getName());
-			servingPo.getIngredients().add(ingredientPo);
-		});
+		if(Optional.of(servingDto.getIngredients()).isPresent()) {
+			servingDto.getIngredients().stream().forEach(ingredient -> {
+				IngredientPo ingredientPo = ingredientRepository.findByName(ingredient.getName());
+				servingPo.getIngredients().add(ingredientPo);
+			});
+		}
 		servingPo.setCalories(servingDto.getCalories());
 		servingPo.setName(servingDto.getName());
 		servingPo.setCountryOfOrigin(servingDto.getCountryOfOrigin());
